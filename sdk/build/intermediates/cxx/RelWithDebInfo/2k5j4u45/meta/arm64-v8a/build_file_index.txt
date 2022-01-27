@@ -1,0 +1,1 @@
+/home/mt/AndroidStudioProjects/DocScanner/sdk/libcxx_helper/CMakeLists.txt

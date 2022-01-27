@@ -1,0 +1,1 @@
+/home/mt/AndroidStudioProjects/DocScanner/sdk/build/intermediates/cxx/RelWithDebInfo/2k5j4u45/obj/arm64-v8a
