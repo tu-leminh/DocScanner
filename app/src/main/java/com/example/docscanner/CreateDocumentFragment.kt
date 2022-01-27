@@ -25,5 +25,14 @@ class CreateDocumentFragment : Fragment() {
 
     fun onClickAddPage() {
         val popupAddPage = PopupMenu(requireContext(), binding.buttonAddPage)
+        popupAddPage.menuInflater.inflate(R.menu.popup_add_page, popupAddPage.menu)
+        popupAddPage.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.action_take_photo -> {}
+                R.id.action_select_photo -> {}
+            }
+            true
+        }
+        popupAddPage.show()
     }
 }
