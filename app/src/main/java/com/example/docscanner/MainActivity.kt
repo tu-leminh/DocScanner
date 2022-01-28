@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
-
 //    private fun change() {
 //        val drawable = binding.imageView.drawable
 //        var bitmap = drawable.toBitmap()

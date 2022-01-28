@@ -146,11 +146,8 @@ class CreateDocumentFragment : Fragment() {
             return
         }
 
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-            Companion.REQUEST_SELECT_PICTURE
-        )
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_SELECT_PICTURE)
     }
 
     companion object {

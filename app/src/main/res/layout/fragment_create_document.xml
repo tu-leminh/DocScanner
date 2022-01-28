@@ -83,6 +83,7 @@
                     android:background="@android:color/transparent"
                     android:orientation="vertical"
                     android:clickable="true"
+                    android:focusable="true"
                     android:onClick="@{()->CreateDocumentFragment.onClickAddPage()}">
                     <ImageView
                         android:layout_width="28dp"
@@ -104,7 +105,8 @@
                     android:background="@android:color/transparent"
                     android:orientation="vertical"
                     android:clickable="true"
-                    android:onClick="@{()->CreateDocumentFragment.onClickDelPage()}">
+                    android:focusable="true"
+                    android:onClick="@{()->CreateDocumentFragment.onClickDelPage()}">>
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
