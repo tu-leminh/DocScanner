@@ -20,18 +20,28 @@ import android.content.DialogInterface
 import android.widget.Toast
 
 import androidx.core.content.ContextCompat
-
-
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 
 class CreateDocumentFragment : Fragment() {
     private lateinit var binding: FragmentCreateDocumentBinding
+
+    private lateinit var createDocumentViewModel: CreateDocumentViewModel
+
+    private lateinit var imageScannedAdapter: ImageScannedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCreateDocumentBinding.inflate(inflater, container, false)
+
+        createDocumentViewModel = ViewModelProvider(this).get(CreateDocumentViewModel::class.java)
+
+        imageScannedAdapter = ImageScannedAdapter(createDocumentViewModel.getImageScanned())
+        binding.VP2ImageScanned.adapter = imageScannedAdapter
+
         return binding.root
     }
 

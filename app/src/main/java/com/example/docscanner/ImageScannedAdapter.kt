@@ -5,12 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 
-class ImageScannedAdapter : RecyclerView.Adapter<ImageScannedAdapter.ImageViewHolder>() {
-    private lateinit var images: Array<Bitmap>
+class ImageScannedAdapter (imageScanned: ArrayList<Bitmap>)
+    : RecyclerView.Adapter<ImageScannedAdapter.ImageViewHolder>() {
+    private lateinit var images: ArrayList<Bitmap>
 
     private var numberOfImage: Int = 0
+
+    init {
+        images = imageScanned
+        numberOfImage = imageScanned.size
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
         ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_image_scanned, parent, false))
@@ -21,7 +28,7 @@ class ImageScannedAdapter : RecyclerView.Adapter<ImageScannedAdapter.ImageViewHo
         }
     }
 
-    override fun getItemCount(): Int = numberOfImage
+    override fun getItemCount(): Int = images.size
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
