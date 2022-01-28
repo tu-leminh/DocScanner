@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 
 
 class CreateDocumentFragment : Fragment() {
@@ -29,6 +30,26 @@ class CreateDocumentFragment : Fragment() {
     private lateinit var binding: FragmentCreateDocumentBinding
     private lateinit var createDocumentViewModel: CreateDocumentViewModel
     private lateinit var imageScannedAdapter: ImageScannedAdapter
+    private var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+            super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+        }
+
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            val x = position + 1
+            val total = createDocumentViewModel.getImageScanned().size
+            Toast.makeText(context, "Page $x/$total", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,32 +76,13 @@ class CreateDocumentFragment : Fragment() {
     }
 
     private fun setOnPageChange() {
-        binding.VP2ImageScanned.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }
 
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val x = position + 1
-                val total = createDocumentViewModel.getImageScanned().size
-                Toast.makeText(context, "Page $x/$total", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-            }
-        })
+        binding.VP2ImageScanned.registerOnPageChangeCallback(myPageChangeCallback)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        //binding.VP2ImageScanned.unregisterOnPageChangeCallback(this)
+        binding.VP2ImageScanned.unregisterOnPageChangeCallback(myPageChangeCallback)
     }
 
     fun onClickAddPage() {
