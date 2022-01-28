@@ -1,34 +1,13 @@
 package com.example.docscanner
 
 import android.graphics.Bitmap
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ImageScannedAdapter (imageScanned: ArrayList<Bitmap>)
-    : RecyclerView.Adapter<ImageScannedAdapter.ImageViewHolder>() {
-    private lateinit var images: ArrayList<Bitmap>
-
-    private var numberOfImage: Int = 0
-
-    init {
-        images = imageScanned
-        numberOfImage = imageScanned.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
-        ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_image_scanned, parent, false))
-
-    override fun onBindViewHolder(holder: ImageScannedAdapter.ImageViewHolder, position: Int) = holder.itemView.run {
-        if (position >= 0) {
-            findViewById<ImageView>(R.id.imageScanned).setImageBitmap(images[position])
-        }
-    }
+class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : FragmentStateAdapter(fa) {
+    private var images: ArrayList<Bitmap> = imageScanned
 
     override fun getItemCount(): Int = images.size
 
-    class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    override fun createFragment(position: Int): Fragment = SingleImageFragment(images[position])
 }

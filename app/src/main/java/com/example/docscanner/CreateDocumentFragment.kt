@@ -2,10 +2,10 @@ package com.example.docscanner
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,30 +16,27 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import com.example.docscanner.databinding.FragmentCreateDocumentBinding
 import java.lang.reflect.Method
-import android.content.DialogInterface
 import android.widget.Toast
 
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 
 class CreateDocumentFragment : Fragment() {
+
     private lateinit var binding: FragmentCreateDocumentBinding
-
     private lateinit var createDocumentViewModel: CreateDocumentViewModel
-
     private lateinit var imageScannedAdapter: ImageScannedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCreateDocumentBinding.inflate(inflater, container, false)
 
         createDocumentViewModel = ViewModelProvider(this).get(CreateDocumentViewModel::class.java)
 
-        imageScannedAdapter = ImageScannedAdapter(createDocumentViewModel.getImageScanned())
+        imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
         binding.VP2ImageScanned.adapter = imageScannedAdapter
 
         return binding.root
@@ -92,16 +89,18 @@ class CreateDocumentFragment : Fragment() {
         popupAddPage.show()
     }
 
-    val REQUEST_IMAGE_CAPTURE = 1
-    val REQUEST_SELECT_PICTURE = 2
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == Companion.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            //imageView.setImageBitmap(imageBitmap)
+            createDocumentViewModel.addImageScanned(imageBitmap)
+            imageScannedAdapter.notifyItemInserted(createDocumentViewModel.getImageScanned().size - 1)
+            binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
         }
-        if (requestCode == REQUEST_SELECT_PICTURE && resultCode == RESULT_OK) {
+        if (requestCode == Companion.REQUEST_SELECT_PICTURE && resultCode == RESULT_OK) {
             val imageBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, data!!.data) as Bitmap
+            createDocumentViewModel.addImageScanned(imageBitmap)
+            imageScannedAdapter.notifyItemInserted(createDocumentViewModel.getImageScanned().size - 1)
+            binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
         }
     }
 
@@ -112,7 +111,7 @@ class CreateDocumentFragment : Fragment() {
         }
 
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        startActivityForResult(takePictureIntent, Companion.REQUEST_IMAGE_CAPTURE)
     }
 
     private fun imageChooseIntent() {
@@ -123,6 +122,13 @@ class CreateDocumentFragment : Fragment() {
 
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_SELECT_PICTURE)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+            Companion.REQUEST_SELECT_PICTURE
+        )
+    }
+
+    companion object {
+        private const val REQUEST_SELECT_PICTURE = 2
+        private const val REQUEST_IMAGE_CAPTURE = 1
     }
 }
