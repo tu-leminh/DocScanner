@@ -1,6 +1,7 @@
 package com.example.docscanner
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
@@ -20,6 +21,14 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : Fragm
 
     fun removeImage(position: Int) {
         images.removeAt(position)
+        notifyDataSetChanged()
+    }
+
+    fun rotate90(position: Int) {
+        val matrix = Matrix()
+        matrix.postRotate(90F)
+        val imgOrigin = images[position]
+        images[position] = Bitmap.createBitmap(imgOrigin, 0, 0, imgOrigin.width, imgOrigin.height, matrix, true)
         notifyDataSetChanged()
     }
 

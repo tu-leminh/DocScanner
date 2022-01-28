@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -40,8 +41,22 @@ class CreateDocumentFragment : Fragment() {
         imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
         binding.VP2ImageScanned.adapter = imageScannedAdapter
 
-        binding.VP2ImageScanned.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback()
-        {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            createDocumentFragment = this@CreateDocumentFragment
+        }
+
+        setOnPageChange()
+    }
+
+    private fun setOnPageChange() {
+        binding.VP2ImageScanned.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
@@ -53,23 +68,19 @@ class CreateDocumentFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val x = position + 1
-                Toast.makeText(context, "Page $x", Toast.LENGTH_LONG).show()
+                val total = createDocumentViewModel.getImageScanned().size
+                Toast.makeText(context, "Page $x/$total", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
             }
         })
-
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            createDocumentFragment = this@CreateDocumentFragment
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        //binding.VP2ImageScanned.unregisterOnPageChangeCallback(this)
     }
 
     fun onClickAddPage() {
@@ -115,6 +126,11 @@ class CreateDocumentFragment : Fragment() {
         Toast.makeText(context, "Del Page", Toast.LENGTH_LONG).show()
         val currentItem = binding.VP2ImageScanned.currentItem
         imageScannedAdapter.removeImage(currentItem)
+    }
+
+    fun onClickRotate90() {
+        val currentPos = binding.VP2ImageScanned.currentItem
+        imageScannedAdapter.rotate90(currentPos)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
