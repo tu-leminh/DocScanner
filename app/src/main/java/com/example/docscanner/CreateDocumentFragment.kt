@@ -20,6 +20,7 @@ import android.widget.Toast
 
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 
 
 class CreateDocumentFragment : Fragment() {
@@ -38,6 +39,27 @@ class CreateDocumentFragment : Fragment() {
 
         imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
         binding.VP2ImageScanned.adapter = imageScannedAdapter
+
+        binding.VP2ImageScanned.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback()
+        {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val x = position + 1
+                Toast.makeText(context, "Page $x", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
 
         return binding.root
     }
@@ -89,17 +111,21 @@ class CreateDocumentFragment : Fragment() {
         popupAddPage.show()
     }
 
+    fun onClickDelPage() {
+        Toast.makeText(context, "Del Page", Toast.LENGTH_LONG).show()
+        val currentItem = binding.VP2ImageScanned.currentItem
+        imageScannedAdapter.removeImage(currentItem)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == Companion.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            createDocumentViewModel.addImageScanned(imageBitmap)
-            imageScannedAdapter.notifyItemInserted(createDocumentViewModel.getImageScanned().size - 1)
+            imageScannedAdapter.addImage(imageBitmap)
             binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
         }
         if (requestCode == Companion.REQUEST_SELECT_PICTURE && resultCode == RESULT_OK) {
             val imageBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, data!!.data) as Bitmap
-            createDocumentViewModel.addImageScanned(imageBitmap)
-            imageScannedAdapter.notifyItemInserted(createDocumentViewModel.getImageScanned().size - 1)
+            imageScannedAdapter.addImage(imageBitmap)
             binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
         }
     }
