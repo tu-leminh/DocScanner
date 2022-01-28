@@ -32,6 +32,10 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : Fragm
         notifyDataSetChanged()
     }
 
+    fun reload() {
+        notifyDataSetChanged()
+    }
+
     override fun getItemId(position: Int): Long {
         return images[position].hashCode().toLong() // make sure notifyDataSetChanged() works
     }

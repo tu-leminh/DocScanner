@@ -9,5 +9,21 @@
         android:id="@+id/createDocumentFragment"
         android:name="com.example.docscanner.CreateDocumentFragment"
         android:label="fragment_create_document"
-        tools:layout="@layout/fragment_create_document" />
+        tools:layout="@layout/fragment_create_document" >
+        <action
+            android:id="@+id/action_createDocumentFragment_to_reorderImageScannedFragment"
+            app:destination="@id/reorderImageScannedFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/reorderImageScannedFragment"
+        android:name="com.example.docscanner.reorder.ReorderImageScannedFragment"
+        android:label="fragment_reorder_image_scanned"
+        tools:layout="@layout/fragment_reorder_image_scanned" >
+        <action
+            android:id="@+id/action_reorderImageScannedFragment_to_createDocumentFragment"
+            app:destination="@id/createDocumentFragment"
+            app:popUpTo="@id/createDocumentFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

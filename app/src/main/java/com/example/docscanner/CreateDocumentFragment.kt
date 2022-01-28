@@ -20,15 +20,16 @@ import java.lang.reflect.Method
 import android.widget.Toast
 
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 
 
 class CreateDocumentFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateDocumentBinding
-    private lateinit var createDocumentViewModel: CreateDocumentViewModel
+    private val createDocumentViewModel: CreateDocumentViewModel by activityViewModels()
     private lateinit var imageScannedAdapter: ImageScannedAdapter
     private var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrolled(
@@ -57,8 +58,6 @@ class CreateDocumentFragment : Fragment() {
     ): View {
         binding = FragmentCreateDocumentBinding.inflate(inflater, container, false)
 
-        createDocumentViewModel = ViewModelProvider(this).get(CreateDocumentViewModel::class.java)
-
         imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
         binding.VP2ImageScanned.adapter = imageScannedAdapter
 
@@ -76,7 +75,6 @@ class CreateDocumentFragment : Fragment() {
     }
 
     private fun setOnPageChange() {
-
         binding.VP2ImageScanned.registerOnPageChangeCallback(myPageChangeCallback)
     }
 
@@ -135,6 +133,10 @@ class CreateDocumentFragment : Fragment() {
         imageScannedAdapter.rotate90(currentPos)
     }
 
+    fun onClickReorder() {
+        findNavController().navigate(R.id.action_createDocumentFragment_to_reorderImageScannedFragment)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == Companion.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
@@ -171,5 +173,10 @@ class CreateDocumentFragment : Fragment() {
     companion object {
         private const val REQUEST_SELECT_PICTURE = 2
         private const val REQUEST_IMAGE_CAPTURE = 1
+    }
+
+    override fun onStart() {
+        imageScannedAdapter.reload()
+        super.onStart()
     }
 }
