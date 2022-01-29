@@ -1,10 +1,7 @@
 package com.example.docscanner
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
-import java.util.*
-import java.util.Collections.swap
 import kotlin.collections.ArrayList
 
 class CreateDocumentViewModel : ViewModel() {

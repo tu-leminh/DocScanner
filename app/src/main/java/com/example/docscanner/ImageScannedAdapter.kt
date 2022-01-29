@@ -35,6 +35,11 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : Fragm
         notifyDataSetChanged()
     }
 
+    fun removeAll() {
+        images.clear()
+        notifyDataSetChanged()
+    }
+
     fun reload() {
         notifyDataSetChanged()
     }

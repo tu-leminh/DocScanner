@@ -1,12 +1,10 @@
 package com.example.docscanner
 
 import android.Manifest
-
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,14 +20,15 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 
-
 import android.content.ContentValues
-
+import android.content.Context
 import android.net.Uri
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
 
 
 class CreateDocumentFragment : Fragment() {
@@ -54,7 +53,9 @@ class CreateDocumentFragment : Fragment() {
             super.onPageSelected(position)
             val x = position + 1
             val total = createDocumentViewModel.getImageScanned().size
-            Toast.makeText(context, "Page $x/$total", Toast.LENGTH_SHORT).show()
+            if (total > 0) {
+                Toast.makeText(context, "Page $x/$total", Toast.LENGTH_SHORT).show()
+            }
         }
 
         override fun onPageScrollStateChanged(state: Int) {
@@ -91,8 +92,8 @@ class CreateDocumentFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         binding.VP2ImageScanned.unregisterOnPageChangeCallback(myPageChangeCallback)
+        super.onDestroy()
     }
 
     fun onClickAddPage() {
@@ -176,15 +177,6 @@ class CreateDocumentFragment : Fragment() {
         }
     }
 
-//    private fun getRealPathFromURI(imageUri: Uri) {
-//        val proj = arrayOf(MediaStore.Images.Media.DATA)
-//        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
-//        val column_index: Int = cursor
-//            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//        cursor.moveToFirst()
-//        return cursor.getString(column_index)
-//    }
-
     private fun setUpIntentCamera() {
         values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -215,13 +207,18 @@ class CreateDocumentFragment : Fragment() {
         startActivityForResult(intent, REQUEST_SELECT_PICTURE)
     }
 
+    fun onClickRemoveAll() {
+        imageScannedAdapter.removeAll()
+    }
+
     companion object {
         private const val REQUEST_SELECT_PICTURE = 2
         private const val REQUEST_IMAGE_CAPTURE = 1
+        private const val imageScannedName2Save = "Image Scanned Temp "
     }
 
-    override fun onStart() {
+    override fun onResume() {
         imageScannedAdapter.reload()
-        super.onStart()
+        super.onResume()
     }
 }
