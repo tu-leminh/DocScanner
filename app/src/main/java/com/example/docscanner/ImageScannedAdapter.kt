@@ -16,7 +16,8 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : Fragm
     override fun createFragment(position: Int): Fragment = SingleImageFragment(images[position])
 
     fun addImage(image: Bitmap) {
-        images.add(pp.tf(image))
+        //images.add(pp.tf(image))
+        images.add(image)
         notifyDataSetChanged()
     }
 
