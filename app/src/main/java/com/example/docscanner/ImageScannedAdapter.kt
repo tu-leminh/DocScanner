@@ -9,13 +9,14 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>) : Fragm
 
     private var images: ArrayList<Bitmap> = imageScanned
     private val pageIds= images.map { it.hashCode().toLong() }
+    private val pp = PictureProcessing()
 
     override fun getItemCount(): Int = images.size
 
     override fun createFragment(position: Int): Fragment = SingleImageFragment(images[position])
 
     fun addImage(image: Bitmap) {
-        images.add(image)
+        images.add(pp.tf(image))
         notifyDataSetChanged()
     }
 
