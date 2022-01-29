@@ -1,13 +1,12 @@
 package com.example.docscanner
 
 import android.Manifest
-import android.R.attr
+
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,16 +20,15 @@ import java.lang.reflect.Method
 import android.widget.Toast
 
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import androidx.core.app.ActivityCompat.startActivityForResult
+
 
 import android.content.ContentValues
-import android.R.attr.thumbnail
+
 import android.net.Uri
 
 

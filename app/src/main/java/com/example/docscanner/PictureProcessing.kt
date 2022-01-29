@@ -1,12 +1,21 @@
 package com.example.docscanner
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfDocument.PageInfo
+import android.os.Environment
+import android.util.Log
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
+import java.io.File
+import java.io.FileOutputStream
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+
 
 class PictureProcessing {
     fun tf(bitmap: Bitmap): Bitmap {
@@ -76,10 +85,9 @@ class PictureProcessing {
         var minVal = 1e9
         for (i in points) {
             srcPoints.add(Point(i.x * ratio, i.y * ratio))
-            minVal=min(minVal,i.x * ratio+i.y * ratio)
+            minVal = min(minVal, i.x * ratio + i.y * ratio)
         }
-        while (srcPoints[0].x+srcPoints[0].y-minVal<1e-3)
-        {
+        while (srcPoints[0].x + srcPoints[0].y - minVal < 1e-3) {
             srcPoints.add(srcPoints[0])
             srcPoints.removeAt(0)
         }
@@ -99,8 +107,7 @@ class PictureProcessing {
                 0.5
             )
         )
-        if (width>height)
-        {
+        if (width > height) {
             srcPoints.add(srcPoints[0])
             srcPoints.removeAt(0)
         }
@@ -132,5 +139,32 @@ class PictureProcessing {
         Imgproc.resize(doc, doc, src.size())
         Utils.matToBitmap(doc, out)
         return out
+    }
+
+
+
+    fun toPdf(Pictures: ArrayList<Bitmap>,fileName: String) {
+        val document = PdfDocument()
+        val pageInfo = PageInfo.Builder(Pictures[0].width, Pictures[0].height, Pictures.size).create()
+        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), "DocScanner")
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MAKE DIR", "failed to create directory")
+            }
+        }
+        for (p in Pictures) {
+            val page: PdfDocument.Page = document.startPage(pageInfo)
+            val canvas: Canvas = page.canvas
+            val paint = Paint()
+            canvas.drawPaint(paint)
+            canvas.drawBitmap(p, 0f, 0f, null)
+            document.finishPage(page)
+        }
+
+        val f = File(mediaStorageDir, fileName+"pdf")
+        val fos = FileOutputStream(f)
+        document.writeTo(fos)
+        document.close()
+        fos.close()
     }
 }
