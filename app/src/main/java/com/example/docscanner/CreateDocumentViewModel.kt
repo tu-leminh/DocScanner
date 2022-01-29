@@ -13,7 +13,7 @@ class CreateDocumentViewModel : ViewModel() {
 
     fun reorder(newOrder: ArrayList<Int>) {
         for(i in newOrder.indices) {
-            if (i != newOrder[i]) {
+            if (i != newOrder[i] && i < newOrder[i])  {
                 var temp: Bitmap = imageScanned[i]
                 imageScanned[i] = imageScanned[newOrder[i]]
                 imageScanned[newOrder[i]] = temp

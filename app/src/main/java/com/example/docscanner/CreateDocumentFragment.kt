@@ -21,6 +21,7 @@ import android.widget.Toast
 
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -135,6 +136,15 @@ class CreateDocumentFragment : Fragment() {
 
     fun onClickReorder() {
         findNavController().navigate(R.id.action_createDocumentFragment_to_reorderImageScannedFragment)
+        setFragmentResultListener("ChangeOrder") { _, bundle ->
+            // We use a String here, but any type that can be put in a Bundle is supported
+            val result = bundle.getString("isOkay")
+            // Do something with the result
+            if (result == "ok")
+            {
+                imageScannedAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

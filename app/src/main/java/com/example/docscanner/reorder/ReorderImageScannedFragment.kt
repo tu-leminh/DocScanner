@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -75,6 +77,8 @@ class ReorderImageScannedFragment : Fragment() {
             newOrder.add(item.title.toInt() - 1)
         }
         createDocumentViewModel.reorder(newOrder)
+        val result = "ok"
+        setFragmentResult("ChangeOrder", bundleOf("isOkay" to result))
         findNavController().navigate(R.id.action_reorderImageScannedFragment_to_createDocumentFragment)
     }
 }
