@@ -32,3 +32,4 @@ google-services.json
 .idea
 sdk/*
 sdk
+sdk/build/
