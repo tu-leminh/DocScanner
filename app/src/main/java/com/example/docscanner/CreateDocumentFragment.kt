@@ -1,6 +1,7 @@
 package com.example.docscanner
 
 import android.Manifest
+import android.R.attr
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -25,6 +26,11 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.content.ContentValues
+import android.R.attr.thumbnail
+import android.net.Uri
 
 
 class CreateDocumentFragment : Fragment() {
@@ -32,6 +38,10 @@ class CreateDocumentFragment : Fragment() {
     private lateinit var binding: FragmentCreateDocumentBinding
     private val createDocumentViewModel: CreateDocumentViewModel by activityViewModels()
     private lateinit var imageScannedAdapter: ImageScannedAdapter
+
+    private lateinit var values: ContentValues
+    private lateinit var imageUri: Uri
+
     private var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrolled(
             position: Int,
@@ -61,6 +71,8 @@ class CreateDocumentFragment : Fragment() {
 
         imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
         binding.VP2ImageScanned.adapter = imageScannedAdapter
+
+        setUpIntentCamera()
 
         return binding.root
     }
@@ -148,10 +160,15 @@ class CreateDocumentFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == Companion.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            imageScannedAdapter.addImage(imageBitmap)
-            binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //val imageBitmap = data!!.extras!!.get("data") as Bitmap
+            try {
+                val thumbnail = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
+                imageScannedAdapter.addImage(thumbnail)
+                binding.VP2ImageScanned.setCurrentItem(createDocumentViewModel.getImageScanned().size - 1, true)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
         }
         if (requestCode == Companion.REQUEST_SELECT_PICTURE && resultCode == RESULT_OK) {
             val imageBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, data!!.data) as Bitmap
@@ -160,14 +177,33 @@ class CreateDocumentFragment : Fragment() {
         }
     }
 
+//    private fun getRealPathFromURI(imageUri: Uri) {
+//        val proj = arrayOf(MediaStore.Images.Media.DATA)
+//        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
+//        val column_index: Int = cursor
+//            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//        cursor.moveToFirst()
+//        return cursor.getString(column_index)
+//    }
+
+    private fun setUpIntentCamera() {
+        values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera")
+        imageUri = requireActivity().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+        )!!
+    }
+
     private fun dispatchTakePictureIntent() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(requireContext(), "You need to allow access camera permissions", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(takePictureIntent, Companion.REQUEST_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
     private fun imageChooseIntent() {
