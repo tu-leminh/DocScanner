@@ -127,7 +127,7 @@ class PictureProcessing {
         Imgproc.adaptiveThreshold(
             doc, doc, 255.0,
             Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
-            Imgproc.THRESH_BINARY, 49, 10.0
+            Imgproc.THRESH_BINARY, 199, 10.0
         )
         Imgproc.resize(doc, doc, src.size())
         Utils.matToBitmap(doc, out)
