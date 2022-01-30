@@ -41,53 +41,13 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-        restoreLastSession()
 
     }
 
     private fun restoreLastSession() {
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
 
-        val count = sharedPreference.getInt("lastCountImg", 0)
-
-        for (i in 0..count)
-        {
-            val path = sharedPreference.getString(i.toString(), "")
-            val imgFile = File(path)
-
-            if (imgFile.exists()) {
-                val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                model.getImageScanned().add(myBitmap)
-            }
-        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
-        val edit: SharedPreferences.Editor = sharedPreference.edit()
-
-        val count = model.getImageScanned().size
-        edit.putInt("lastCountImg", count)
-
-        for (i in 0..count)
-        {
-            val path = externalCacheDir?.absolutePath.toString() + count.toString() + ".PNG"
-            val bitmapFile = model.getImageScanned()[i]
-            val fileAtPath = File(path)
-
-            try {
-                val use = FileOutputStream(fileAtPath).use { out ->
-                    bitmapFile.compress(Bitmap.CompressFormat.PNG, 100, out)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-
-        edit.commit()
-    }
 
     //    private fun change() {
 //        val drawable = binding.imageView.drawable

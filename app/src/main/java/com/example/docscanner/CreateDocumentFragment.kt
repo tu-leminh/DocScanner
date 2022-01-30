@@ -66,9 +66,9 @@ class CreateDocumentFragment : Fragment() {
     ): View {
         binding = FragmentCreateDocumentBinding.inflate(inflater, container, false)
 
-        imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned())
+        imageScannedAdapter = ImageScannedAdapter(this, createDocumentViewModel.getImageScanned(), context)
         binding.VP2ImageScanned.adapter = imageScannedAdapter
-
+        imageScannedAdapter.restoreLastSession()
         setUpIntentCamera()
 
         return binding.root
