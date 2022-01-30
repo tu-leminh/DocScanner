@@ -3,9 +3,19 @@ package com.example.docscanner
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import kotlin.collections.ArrayList
+import android.preference.PreferenceManager
+
+import android.content.SharedPreferences
+
+
+
 
 class CreateDocumentViewModel : ViewModel() {
     private var imageScanned = ArrayList<Bitmap>()
+
+    init {
+
+    }
 
     fun getImageScanned() = imageScanned
 

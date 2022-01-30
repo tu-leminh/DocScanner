@@ -24,11 +24,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 
 import android.content.ContentValues
-import android.content.Context
+
 import android.net.Uri
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.File
 
 
 class CreateDocumentFragment : Fragment() {
