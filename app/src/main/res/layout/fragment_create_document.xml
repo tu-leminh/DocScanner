@@ -26,6 +26,41 @@
             android:focusable="true"
             android:onClick="@{()->CreateDocumentFragment.onClickRemoveAll()}"/>
 
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+            <TextView
+                android:id="@+id/textViewFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/textview_dashed_underline"
+                android:text="New document"
+                android:textColor="@color/black"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{()->CreateDocumentFragment.onClickEditFileName()}"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{()->CreateDocumentFragment.onClickEditFileName()}"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -37,21 +72,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:background="@drawable/textview_dashed_underline"
-            android:text="New document"
-            android:textColor="@color/black"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/VP2ImageScanned"
@@ -59,10 +80,11 @@
             android:layout_height="0dp"
             android:layout_marginTop="12dp"
             android:background="#EAEAEA"
+            android:focusedByDefault="true"
             app:layout_constraintBottom_toTopOf="@+id/scrollView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <ScrollView
             android:id="@+id/scrollView2"

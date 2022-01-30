@@ -2,6 +2,7 @@ package com.example.docscanner
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -24,8 +25,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 
 import android.content.ContentValues
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 
 import android.net.Uri
+import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
+import com.example.docscanner.databinding.DialogRenameFileLayoutBinding
 
 
 class CreateDocumentFragment : Fragment() {
@@ -133,12 +140,18 @@ class CreateDocumentFragment : Fragment() {
     }
 
     fun onClickDelPage() {
+        if (createDocumentViewModel.getImageScanned().size == 0) {
+            return
+        }
         Toast.makeText(context, "Del Page", Toast.LENGTH_LONG).show()
         val currentItem = binding.VP2ImageScanned.currentItem
         imageScannedAdapter.removeImage(currentItem)
     }
 
     fun onClickRotate90() {
+        if (createDocumentViewModel.getImageScanned().size == 0) {
+            return
+        }
         val currentPos = binding.VP2ImageScanned.currentItem
         imageScannedAdapter.rotate90(currentPos)
     }
@@ -206,6 +219,48 @@ class CreateDocumentFragment : Fragment() {
 
     fun onClickRemoveAll() {
         imageScannedAdapter.removeAll()
+    }
+
+    fun onClickEditFileName() {
+        showDialogRename()
+    }
+
+    private fun showDialogRename() {
+        val dialogBinding: DialogRenameFileLayoutBinding? =
+            DataBindingUtil.inflate(
+                LayoutInflater.from(requireContext()),
+                R.layout.dialog_rename_file_layout,
+                null, false
+            )
+        val dialog = AlertDialog.Builder(requireContext(), 0).create()
+
+        dialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setView(dialogBinding?.root)
+            setCancelable(false)
+        }.show()
+
+        dialogBinding!!.editTextFileName.setText(binding.textViewFileName.text.toString())
+        dialogBinding!!.editTextFileName.requestFocus()
+
+        // Show keyboard
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        dialogBinding!!.btnCancel.setOnClickListener {
+            inputMethodManager.hideSoftInputFromWindow(dialogBinding!!.editTextFileName.windowToken, 0)
+            dialog.dismiss()
+        }
+
+        dialogBinding!!.btnRename.setOnClickListener {
+            inputMethodManager.hideSoftInputFromWindow(dialogBinding!!.editTextFileName.windowToken, 0)
+            binding.textViewFileName.text = dialogBinding!!.editTextFileName.text.toString()
+            dialog.dismiss()
+        }
+
+        dialogBinding!!.btnClearText.setOnClickListener {
+            dialogBinding!!.editTextFileName.text.clear()
+        }
     }
 
     companion object {
