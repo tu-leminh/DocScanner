@@ -14,6 +14,7 @@
             android:id="@+id/action_createDocumentFragment_to_reorderImageScannedFragment"
             app:destination="@id/reorderImageScannedFragment"
             app:popUpToInclusive="false" />
+
     </fragment>
     <fragment
         android:id="@+id/reorderImageScannedFragment"
@@ -26,4 +27,5 @@
             app:popUpTo="@id/createDocumentFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
 </navigation>

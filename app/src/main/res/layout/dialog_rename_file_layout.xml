@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:text="Rename"
+            android:text="Save to PDF"
             android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -87,13 +89,15 @@
             android:background="@drawable/background_button_rename"
             android:paddingHorizontal="26dp"
             android:paddingVertical="8dp"
-            android:text="Rename"
+            android:text="Save"
             android:textColor="@color/white"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+
+            />
 
         <TextView
             android:id="@+id/btnCancel"

@@ -143,28 +143,30 @@ class PictureProcessing {
 
 
 
-    fun toPdf(Pictures: ArrayList<Bitmap>,fileName: String) {
-        val document = PdfDocument()
-        val pageInfo = PageInfo.Builder(Pictures[0].width, Pictures[0].height, Pictures.size).create()
-        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), "DocScanner")
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MAKE DIR", "failed to create directory")
+    companion object {
+        fun toPdf(Pictures: ArrayList<Bitmap>,fileName: String) {
+            val document = PdfDocument()
+            val pageInfo = PageInfo.Builder(Pictures[0].width, Pictures[0].height, Pictures.size).create()
+            val mediaStorageDir = File(Environment.getExternalStorageDirectory(), "DocScanner")
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.d("MAKE DIR", "failed to create directory")
+                }
             }
-        }
-        for (p in Pictures) {
-            val page: PdfDocument.Page = document.startPage(pageInfo)
-            val canvas: Canvas = page.canvas
-            val paint = Paint()
-            canvas.drawPaint(paint)
-            canvas.drawBitmap(p, 0f, 0f, null)
-            document.finishPage(page)
-        }
+            for (p in Pictures) {
+                val page: PdfDocument.Page = document.startPage(pageInfo)
+                val canvas: Canvas = page.canvas
+                val paint = Paint()
+                canvas.drawPaint(paint)
+                canvas.drawBitmap(p, 0f, 0f, null)
+                document.finishPage(page)
+            }
 
-        val f = File(mediaStorageDir, fileName+"pdf")
-        val fos = FileOutputStream(f)
-        document.writeTo(fos)
-        document.close()
-        fos.close()
+            val f = File(mediaStorageDir, fileName+"pdf")
+            val fos = FileOutputStream(f)
+            document.writeTo(fos)
+            document.close()
+            fos.close()
+        }
     }
 }

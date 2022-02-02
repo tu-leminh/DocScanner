@@ -32,6 +32,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.example.docscanner.databinding.DialogRenameFileLayoutBinding
 
 
@@ -221,7 +222,7 @@ class CreateDocumentFragment : Fragment() {
         imageScannedAdapter.removeAll()
     }
 
-    fun onClickEditFileName() {
+    fun onClickSave2PDF() {
         showDialogRename()
     }
 
@@ -240,7 +241,6 @@ class CreateDocumentFragment : Fragment() {
             setCancelable(false)
         }.show()
 
-        dialogBinding!!.editTextFileName.setText(binding.textViewFileName.text.toString())
         dialogBinding!!.editTextFileName.requestFocus()
 
         // Show keyboard
@@ -254,7 +254,7 @@ class CreateDocumentFragment : Fragment() {
 
         dialogBinding!!.btnRename.setOnClickListener {
             inputMethodManager.hideSoftInputFromWindow(dialogBinding!!.editTextFileName.windowToken, 0)
-            binding.textViewFileName.text = dialogBinding!!.editTextFileName.text.toString()
+            PictureProcessing.toPdf(createDocumentViewModel.getImageScanned(), dialogBinding.editTextFileName.text.toString())
             dialog.dismiss()
         }
 
