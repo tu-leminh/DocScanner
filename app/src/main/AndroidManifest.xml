@@ -20,12 +20,14 @@
         android:theme="@style/Theme.DocScanner">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
 
         </activity>
 
         <activity android:name=".splash.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             tools:ignore="Instantiatable" >
 
             <intent-filter>
