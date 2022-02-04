@@ -46,9 +46,9 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
     override fun createFragment(position: Int): Fragment = SingleImageFragment(images[position])
 
     fun addImage(image: Bitmap) {
-        //images.add(pp.tf(image))
+        images.add(pp.tf(image))
         //pp.toPdf(images,"test")
-        images.add(image)
+        //images.add(image)
         saveToStorage()
         notifyDataSetChanged()
     }
