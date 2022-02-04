@@ -24,6 +24,7 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
     private val dir = "/data/local/tmp/DocScanner"
 
     fun restoreLastSession() {
+        if (images.size > 0) return
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val count = sharedPreference.getInt("lastCountImg", 0)
