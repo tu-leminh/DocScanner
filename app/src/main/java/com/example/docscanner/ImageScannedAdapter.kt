@@ -49,7 +49,7 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
         images.add(pp.tf(image))
         //pp.toPdf(images,"test")
         //images.add(image)
-        saveToStorage()
+        saveToStorageAdd()
         notifyDataSetChanged()
     }
 
@@ -80,7 +80,7 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
         notifyDataSetChanged()
     }
 
-    private fun saveToStorage()
+    private fun saveToStorageAdd()
     {
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
         val edit: SharedPreferences.Editor = sharedPreference.edit()
