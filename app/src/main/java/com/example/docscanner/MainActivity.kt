@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         //binding.imageView.setOnClickListener { change() }
         OpenCVLoader.initDebug()
         ////
-        requestPermission()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -55,20 +54,4 @@ class MainActivity : AppCompatActivity() {
 //        bitmap = pp.tf(bitmap)
 //        binding.imageView.setImageBitmap(bitmap)
 //    }
-    private fun requestPermission() {
-        val permissions = ArrayList<String>()
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.CAMERA)
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        val arrayPermissions = arrayOfNulls<String>(permissions.size)
-        if (permissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissions.toArray(arrayPermissions), 100)
-        }
-    }
 }

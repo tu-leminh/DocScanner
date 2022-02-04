@@ -146,7 +146,7 @@ class CreateDocumentFragment : Fragment() {
         if (createDocumentViewModel.getImageScanned().size == 0) {
             return
         }
-        Toast.makeText(context, "Del Page", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Del Page", Toast.LENGTH_SHORT).show()
         val currentItem = binding.VP2ImageScanned.currentItem
         imageScannedAdapter.removeImage(currentItem)
     }
@@ -221,12 +221,22 @@ class CreateDocumentFragment : Fragment() {
     }
 
     fun onClickRemoveAll() {
-        imageScannedAdapter.removeAll()
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
-        val edit: SharedPreferences.Editor = sharedPreference.edit()
-        edit.clear()
-        edit.apply()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("Do you want to remove all?")
 
+        builder.setPositiveButton("Yes") { dialog, which ->
+            imageScannedAdapter.removeAll()
+            val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+            val edit: SharedPreferences.Editor = sharedPreference.edit()
+            edit.clear()
+            edit.apply()
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("No") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     fun onClickSave2PDF() {
