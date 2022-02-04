@@ -55,7 +55,7 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
 
     fun removeImage(position: Int) {
         images.removeAt(position)
-        saveToStorage()
+        saveToStorageDelete()
         notifyDataSetChanged()
     }
 
@@ -69,6 +69,10 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
 
     fun removeAll() {
         images.clear()
+        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreference.edit()
+        edit.clear()
+        edit.apply()
         notifyDataSetChanged()
     }
 
@@ -102,6 +106,40 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
+        edit.commit()
+    }
+
+
+    private fun saveToStorageDelete()
+    {
+        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreference.edit()
+
+        val count = images.size
+        edit.putInt("lastCountImg", count)
+
+        for (i in 0 until count)
+        {
+            val dir_path = File(dir)
+            if(!dir_path.exists())
+                dir_path.mkdirs();
+
+            val file: File =
+                File(Environment.getExternalStorageDirectory().toString(), "$i.png")
+            val bitmapFile = images[i]
+
+            try {
+                val use = FileOutputStream(file).use { out ->
+                    bitmapFile.compress(Bitmap.CompressFormat.PNG, 100, out)
+                }
+
+                edit.putString(i.toString(), file.absolutePath)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
 
         edit.commit()
     }
