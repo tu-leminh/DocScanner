@@ -83,26 +83,24 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
 
         val count = images.size
         edit.putInt("lastCountImg", count)
+        val i = count - 1
 
-        for (i in 0 until count)
-        {
-            val dir_path = File(dir)
-            if(!dir_path.exists())
-                dir_path.mkdirs();
+        val dir_path = File(dir)
+        if(!dir_path.exists())
+            dir_path.mkdirs();
 
-            val file: File =
-                File(Environment.getExternalStorageDirectory().toString(), "$i.png")
-            val bitmapFile = images[i]
+        val file: File =
+            File(Environment.getExternalStorageDirectory().toString(), "$i.png")
+        val bitmapFile = images[i]
 
-            try {
-                val use = FileOutputStream(file).use { out ->
-                    bitmapFile.compress(Bitmap.CompressFormat.PNG, 100, out)
-                }
-
-                edit.putString(i.toString(), file.absolutePath)
-            } catch (e: IOException) {
-                e.printStackTrace()
+        try {
+            val use = FileOutputStream(file).use { out ->
+                bitmapFile.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
+
+            edit.putString(i.toString(), file.absolutePath)
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
 
         edit.commit()
