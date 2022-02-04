@@ -21,7 +21,7 @@ class ImageScannedAdapter(fa: Fragment, imageScanned: ArrayList<Bitmap>, context
     private var images: ArrayList<Bitmap> = imageScanned
     private val pageIds= images.map { it.hashCode().toLong() }
     private val pp = PictureProcessing()
-    private val dir = "mnt/sdcard/"
+    private val dir = "/data/local/tmp/DocScanner"
 
     fun restoreLastSession() {
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)

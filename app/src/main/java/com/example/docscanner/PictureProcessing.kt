@@ -12,6 +12,7 @@ import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -162,11 +163,19 @@ class PictureProcessing {
                 document.finishPage(page)
             }
 
-            val f = File(mediaStorageDir, fileName+"pdf")
-            val fos = FileOutputStream(f)
-            document.writeTo(fos)
-            document.close()
-            fos.close()
+            val file: File =
+                File(mediaStorageDir.toString(), fileName + ".pdf")
+
+            try {
+                val use = FileOutputStream(file).use { out ->
+                    document.writeTo(out)
+                    document.close()
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+
         }
     }
 }
