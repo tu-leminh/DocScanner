@@ -164,7 +164,7 @@ class PictureProcessing {
             }
 
             val file: File =
-                File(mediaStorageDir.toString(), fileName + ".pdf")
+                File(mediaStorageDir.toString(), fileName)
 
             try {
                 val use = FileOutputStream(file).use { out ->
