@@ -26,10 +26,12 @@ import androidx.viewpager2.widget.ViewPager2
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 
 import android.net.Uri
+import android.preference.PreferenceManager
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -220,10 +222,19 @@ class CreateDocumentFragment : Fragment() {
 
     fun onClickRemoveAll() {
         imageScannedAdapter.removeAll()
+        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreference.edit()
+        edit.clear()
+        edit.apply()
+
     }
 
     fun onClickSave2PDF() {
         showDialogRename()
+        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit: SharedPreferences.Editor = sharedPreference.edit()
+        edit.clear()
+        edit.apply()
     }
 
     private fun showDialogRename() {
